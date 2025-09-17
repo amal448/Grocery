@@ -8,12 +8,12 @@ export const AppContextProvider = ({ children }) => {
 
     const currency = import.meta.env.VITE_CURRENCY
     const navigate = useNavigate();
-    const [user, setUser] = useState(null)
-    const [isSeller, setIsSeller] = useState(false)
-    const [showUserLogin, setShowUserLogin] = useState(false)
-    const [products, setProducts] = useState([])
-    const [cartItems,setCartItems]=useState({})
-    const [searchQuery,setSearchQuery]=useState({})
+    const [user, setUser] = useState(null) //user
+    const [isSeller, setIsSeller] = useState(false) //admin
+    const [showUserLogin, setShowUserLogin] = useState(false) //to show login ui
+    const [products, setProducts] = useState([]) //get product data
+    const [cartItems,setCartItems]=useState({}) //store each productid and cartcount
+    const [searchQuery,setSearchQuery]=useState({}) // prompt data
 
     //fetch All Products
     const fetchProducts = async () => {
