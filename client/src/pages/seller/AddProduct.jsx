@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { categories } from '../../assets/assets'
 import { assets } from '../../assets/assets'
+import { useAppContext } from '../../context/AppContext'
+import toast from 'react-hot-toast'
 
 const AddProduct = () => {
 
@@ -11,9 +13,41 @@ const AddProduct = () => {
     const [price, setPrice] = useState('')
     const [offerPrice, setOfferPrice] = useState('')
 
+    const { axios } = useAppContext()
     const onSubmitHandler = async (event) => {
-        event.preventDefault();
+        try {
+            event.preventDefault();
+            const productData = {
+                name,
+                description: description.split('\n'),
+                category,
+                price,
+                offerPrice
+            }
+            const formData = new FormData();
+            formData.append('productData', JSON.stringify(productData))
+            for (let i = 0; i < files.length; i++) {
+               formData.append('images', files[i]); 
+            }
+            const { data } = await axios.post('/api/product/add', formData)
+            if (data.success) {
+                toast.success(data.message);
+                setOfferPrice("");
+                setPrice("");
+                setCategory("");
+                setDescription("");
+                setName("");
+                setFiles([])
+            }
+            else {
+                toast.error(data.message);
+            }
+        }
+        catch (error) {
+            toast.error(error.message);
+        }
     }
+
     return (
         <div className="no-scrollbar flex-1 h-[95vh] overflow-y-scroll flex flex-col justify-between">
             <form onSubmit={onSubmitHandler} className="md:p-10 p-4 space-y-5 max-w-lg">

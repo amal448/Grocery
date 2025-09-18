@@ -4,8 +4,8 @@ import { useAppContext } from '../context/AppContext';
 const Login = () => {
     const [state, setState] = React.useState("login");
     const [name, setName] = React.useState("");
-    const [email, setEmail] = React.useState("");
-    const [password, setPassword] = React.useState("");
+    const [email, setEmail] = React.useState("test@123.com");
+    const [password, setPassword] = React.useState("Test@123");
     
     const { setShowUserLogin,setUser } = useAppContext()
 

@@ -1,15 +1,32 @@
 import React, { useState, useEffect } from 'react'
 import { useAppContext } from '../../context/AppContext'
+import toast from 'react-hot-toast'
 
 const SellerLogin = () => {
-    const { isSeller, setIsSeller, navigate } = useAppContext()
-    const [ email, setEmail ] = useState("test@gmail.com")
-    const [password, setPassword] = useState("test")
+    const { isSeller, setIsSeller, navigate, axios } = useAppContext()
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
 
     const onSubmitHandler = async (event) => {
-        event.preventDefault();
-        console.log("dbdhdh");
-        setIsSeller(true)
+        try {
+            event.preventDefault();
+            const { data } =await axios.post('/api/seller/login', { email, password })
+           console.log(data);
+           
+            if (data.success) {
+                setIsSeller(true)
+                navigate('/seller')
+            }
+            else {
+                console.log(data.message);
+                
+                toast.error(data.message)
+            }
+        } catch (error) {
+            toast.error(error.message)
+
+        }
+
     }
     useEffect(() => {
         if (isSeller) {
@@ -35,7 +52,7 @@ const SellerLogin = () => {
                 <div className='w-full'>
                     <p>Password</p>
                     <input onChange={(e) => setPassword(e.target.value)} value={password} type="password"
-                     className='border border-gray-200 rounded w-full p-2 mt-1 outline-primary' placeholder='enter your password' required />
+                        className='border border-gray-200 rounded w-full p-2 mt-1 outline-primary' placeholder='enter your password' required />
                 </div>
                 <button className='bg-primary text-white w-full py-2 rounded-md
                 cursor-pointer'>Login</button>
