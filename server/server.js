@@ -15,7 +15,7 @@ import { stripeWebHooks } from './controllers/orderController.js';
 const port=process.env.PORT||4000
 const app=express()
 
-const allowedOrigins=['http://localhost:5173'||'https://grocery-arq6.vercel.app']
+const allowedOrigins=['http://localhost:5173','https://grocery-arq6.vercel.app']
 app.post('/stripe',express.raw({type:'application/json'}),stripeWebHooks)
 
 await connectDb()
