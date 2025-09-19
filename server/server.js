@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { application } from 'express';
 import cors from 'cors'
 import 'dotenv/config'
 import cookieParser from 'cookie-parser';
@@ -10,10 +10,13 @@ import cartRoute from '../server/routes/cartRoute.js'
 import connectCloudinary from './configs/cloudinary.js';
 import addressRoute from '../server/routes/addressRoute.js'
 import orderRoute from '../server/routes/orderRoute.js'
+import { stripeWebHooks } from './controllers/orderController.js';
+
 const port=process.env.PORT||4000
 const app=express()
 
 const allowedOrigins=['http://localhost:5173']
+app.post('/stripe',express.raw({type:'application/json'}),stripeWebHooks)
 
 await connectDb()
 await connectCloudinary() //cloudinary config
