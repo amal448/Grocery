@@ -2,17 +2,34 @@ import { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { assets } from '../assets/assets'
 import { useAppContext } from '../context/AppContext'
+import toast from 'react-hot-toast'
 
 const Navbar = () => {
     const [open, setOpen] = useState(false)
     const { user, setUser,
         navigate, setShowUserLogin
         , searchQuery, setSearchQuery,
-        getCartAmount, getCartCount } = useAppContext();
+        getCartAmount, getCartCount, axios, fetchUser } = useAppContext();
 
-    const logout = () => {
-        setUser(null)
-        navigate('/')
+    // useEffect(() => {
+    //     if (user) {
+    //         fetchUser()
+    //     }
+    // }, [])
+
+    const logout = async () => {
+        try {
+            const { data } = await axios.get('/api/user/logout')
+            if (data.success) {
+                toast.success(data.message)
+                navigate('/')
+                setUser("")
+            }
+        }
+        catch (error) {
+            console.log(error);
+            toast.success(error.message)
+        }
     }
 
     useEffect(() => {
@@ -81,14 +98,14 @@ const Navbar = () => {
                     <img src={assets.nav_cart_icon} className='w-6 opacity-80' alt="cart" />
                     <button className="absolute -top-2 -right-3 text-xs text-white bg-primary-dull w-[18px] h-[18px] rounded-full">{getCartCount()}</button>
                 </div>
-            <button onClick={() => open ? setOpen(false) : setOpen(true)} aria-label="Menu" className="sm:hidden">
-                {/* Menu Icon SVG */}
-                <img src={assets.menu_icon} alt="menu" />
-            </button>
+                <button onClick={() => open ? setOpen(false) : setOpen(true)} aria-label="Menu" className="sm:hidden">
+                    {/* Menu Icon SVG */}
+                    <img src={assets.menu_icon} alt="menu" />
+                </button>
             </div>
 
             {/* Mobile Menu */}
-            
+
             {
                 open && (
                     <div className={`${open ? 'flex' : 'hidden'} absolute top-[60px] left-0 w-full bg-white shadow-md py-4 flex-col items-start gap-2 px-5 text-sm md:hidden`}>

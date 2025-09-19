@@ -6,7 +6,7 @@ import VerifySeller from '../middlewares/authSeller.js'
 const router = express.Router()
 //Seller routes
 router.post('/add',upload.array("images"),VerifySeller, addProduct)
-router.get('/list', VerifySeller, productList)
+router.get('/list', productList)
 router.get('/id', VerifySeller, productById)
 router.post('/stock', VerifySeller, changeStock)
 

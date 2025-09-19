@@ -1,14 +1,16 @@
 import jwt from 'jsonwebtoken'
 const VerifyUser = (req, res, next) => {
     try {
+        
         const { token } = req.cookies;
-        if (!token) return res.json({ success: false, message: 'Not Authorised' })
+        
+        if (!token) return res.json({ success: false, message: 'Not Authorised1' })
         const tokenDecode = jwt.verify(token, process.env.JWTSECRET)
-
+        
         if (tokenDecode.id) {
-            req.body.userId = tokenDecode.id
+            req.userId = tokenDecode.id
         }
-        else res.json({ success: false, message: "Not Authorised" })
+        else res.json({ success: false, message: "Not Authorised2" })
         next()
     }
     catch (error) {

@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { assets } from '../assets/assets'
-
+import { useAppContext } from '../context/AppContext'
+import toast from 'react-hot-toast'
 //Input Field Component
 const InputField = ({ type, placeholder, name, handleChange, address }) => (
     <input className='w-full px-2 py-2.5 border border-gray-500/30 rounded outline-none text-gray-500
@@ -16,6 +17,7 @@ const InputField = ({ type, placeholder, name, handleChange, address }) => (
 
 const AddAddress = () => {
 
+    const { axios, user, navigate } = useAppContext()
     const [address, setAddress] = useState({
         firstName: '',
         lastName: '',
@@ -29,13 +31,34 @@ const AddAddress = () => {
     })
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setAddress((...prev) => ({
+        setAddress((prev) => ({
             ...prev, [name]: value
         }))
     }
     const onSubmitHandler = async (e) => {
         e.preventDefault()
+        try {
+            console.log(address);
+            
+            const { data } = await axios.post('/api/address/add', { address })
+            if (data.success) {
+                toast.success(data.message)
+                navigate('/cart')
+            }
+            else {
+                toast.error(error.message)
+            }
+        }
+        catch (error) {
+            toast.error(error.message)
+        }
     }
+    useEffect(()=>{
+        if(!user)
+        {
+            navigate('/cart')
+        }
+    },[])
     return (
         <div className='mt-16 pb-16'>
             <p className='text-2xl md:text-3xl text-gray-500'>Add Shipping {' '}
